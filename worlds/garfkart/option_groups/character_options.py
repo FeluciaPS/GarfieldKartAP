@@ -1,54 +1,36 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from Options import Choice, Toggle
+from Options import Choice, Toggle, DefaultOnToggle
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from ..world import GarfKartWorld
     
 
-class RandomizeCharacters(Toggle):
+class RandomizeCharacters(DefaultOnToggle):
     """
     Adds characters to the item pool, and adds a location for winning a race as each character.
     """
     display_name = "Randomize Characters"
 
-class RandomizeKarts(Toggle):
+class RandomizeKarts(DefaultOnToggle):
     """
     Adds karts to the item pool, and adds a location for winning a race with each kart.
     """
     display_name = "Randomize Karts"
 
-class RandomizeHats(Choice):
+class RandomizeHats(DefaultOnToggle):
     """
-    Adds hats to the item pool
-
-    - Off: Hats are unlocked in their vanilla locations
-    - Progressive: Always unlock bronze hats first, then silver, then gold
-    - Combine Tiers: Unlocking a hat instantly unlocks bronze, silver, and gold
+    Adds hats to the item pool, and adds locatiosn for unlocking a hat via winning a single race or time trial
     """
     display_name = "Randomize Hats"
-    default = 0
 
-    option_off = 0
-    option_progressive = 1
-    option_combine_tiers = 2
-
-class RandomizeSpoilers(Choice):
+class RandomizeSpoilers(Toggle):
     """
-    Adds spoilers to the item pool
-
-    - Off: Spoilers are unlocked in their vanilla locations
-    - Progressive: Always unlock bronze spoilers first, then silver, then gold
-    - Combine Tiers: Unlocking a spoiler instantly unlocks bronze, silver, and gold
+    Adds spoilers to the item pool, and adds locations for unlocking spoilers via grand prix 1st place finishes
     """
     display_name = "Randomize Spoilers"
-    default = 0
-
-    option_off = 0
-    option_progressive = 1
-    option_combine_tiers = 2
 
 class StatRandomizer(Choice):
     """

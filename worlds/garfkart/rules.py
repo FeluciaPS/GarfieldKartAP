@@ -50,6 +50,36 @@ def get_required_race_items(race, randomize_races: bool, randomize_cups: bool, p
 
     return items
 
+def get_time_trial_access_rule(race, randomize_races: bool, randomize_cups: bool, progressive_cups: bool):
+    """
+    A course's time trials are in logic once the course can be reached by ANY
+    unlock - its own course unlock OR the cup it belongs to. Returns a rule, or
+    None when the course is always reachable (nothing gating it).
+    """
+    clauses = []
+
+    if randomize_races:
+        clauses.append(Has(race))
+
+    if randomize_cups:
+        cup = CUPS_BY_RACE[race]
+        if progressive_cups:
+            index = CUP_NAMES.index(cup)
+            if index == 0:
+                # The first cup is always unlocked, so this path is always open
+                return None
+            clauses.append(Has("Progressive Cup Unlock", index))
+        else:
+            clauses.append(Has(cup))
+
+    if not clauses:
+        return None
+
+    rule = clauses[0]
+    for clause in clauses[1:]:
+        rule |= clause
+    return rule
+
 def set_all_entrance_rules(world: GarfKartWorld):
     # Store these in a variable to reduce redundancy
     randomize_races = is_races_randomized(world) == RandomizerType.random
@@ -84,6 +114,16 @@ def set_all_entrance_rules(world: GarfKartWorld):
             continue
 
         world.set_rule(race_entrance, HasAllCounts(required_items))
+
+    if world.options.time_trial_randomization:
+        for race in RACE_NAMES:
+            rule = get_time_trial_access_rule(
+                race, randomize_races, randomize_cups, world.options.progressive_cups
+            )
+            if rule is None:
+                continue
+
+            world.set_rule(world.get_entrance(f"{race} Time Trials"), rule)
 
 def set_all_location_rules(world: GarfKartWorld):
 
@@ -140,18 +180,15 @@ def set_completion_condition(world: GarfKartWorld):
                 **get_required_cup_items(cup, randomize_races, randomize_cups, world.options.progressive_cups)
             }
 
+    # Both the Races and Time Trials goals are beaten once every race is
+    # accessible - time trials are assumed always beatable once you can reach
+    # their course.
     if world.options.goal in ["races", "time_trials"]:
-        # All races need to be accessible to beat the game
         for race in RACE_NAMES:
             required_items = {
                 **required_items,
                 **get_required_race_items(race, randomize_races, randomize_cups, world.options.progressive_cups)
             }
-
-    if world.options.goal == "time_trials":
-        # TODO: Platinum time trials require specific items to beat,
-        # but for now we just assume they're always beatable
-        pass
 
     if world.options.goal == "puzzle_piece_hunt":
         required_items["Puzzle Piece"] = world.options.puzzle_piece_count.value

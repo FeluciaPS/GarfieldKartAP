@@ -14,16 +14,12 @@ class Goal(Choice):
 
     - Grand Prix: Get first place in every grand prix cup
     - Races: Get first place in every race
-    - Time Trials: Gain medals in all time trials (READ BELOW)
-    - Puzzle Piece Hunt: Collect puzzle pieces
-
-    Note on time trials: Although the game generates, please check for mod support
-    before enabling this option, and beware that not all time trials may be
-    beatable with the current logic and you could get stuck.
+    - Time Trials: Gain medals in all time trials
+    - Puzzle Piece Hunt: Collect specified amount of puzzle pieces
     """
     display_name = "Goal"
 
-    default = 0
+    default = 1
     option_grand_prix = 0
     option_races = 1
     option_time_trials = 2
@@ -31,10 +27,12 @@ class Goal(Choice):
 
 class CCRequirement(Choice):
     """
-    Sets the CC requirement for the Grand Prix and Races goals. Other ccs may still 
-    give checks depending on other options.
+    Sets the CC you will be expected to play on. This determines checks added for winning on specific CCs,
+    as well as what you need to be able to goal with grand_prix and races on. Selecting any allows winning
+    on any CC of your choice, with no extra cc checks added.
 
-    If the goal is not Grand Prix or Races, this option does nothing.
+    Winning on 150cc will send all checks for 50 and 100cc, and same goes for 100cc giving 50cc checks.
+    For goaling your slot, if the option is not set to grand prix or races, this option just affects the extra cc win checks.
     """
     display_name = "CC Requirement"
 
@@ -47,7 +45,7 @@ class CCRequirement(Choice):
 class TimeTrialGoalGrade(Choice):
     """
     Sets the minimum medal grade required for the Time Trials goal
-    !!!IMPORTANT!!! Platinum medals require certain kart combinations to be 
+    !!!IMPORTANT!!! Platinum medals require certain kart combinations to be
     reasonably achievable. These aren't implemented in logic yet, so randomizing
     kart loadouts may lead to impossible games.
 
@@ -55,7 +53,7 @@ class TimeTrialGoalGrade(Choice):
     """
     display_name = "Time Trials Goal Grade"
 
-    default = 2
+    default = 1
     option_bronze = 0
     option_silver = 1
     option_gold = 2

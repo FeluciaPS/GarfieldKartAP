@@ -32,17 +32,17 @@ PUZZLE_PIECE_LOCATION_TABLE = {}
 COURSE_WIN_LOCATION_TABLE = {}
 TIME_TRIAL_LOCATION_TABLE = {}
 LAP_SANITY_LOCATION_TABLE = {}
+CC_WIN_LOCATION_TABLE = {}
 
-# Generate 8 spoiler unlock locations for every cup
+# Generate 2 spoiler unlock locations for every cup
 for index, cup in enumerate(CUP_NAMES):
     SPOILER_UNLOCK_LOCATION_TABLE[f'{cup}: Unlock Spoiler (1)'] = index + 301
     SPOILER_UNLOCK_LOCATION_TABLE[f'{cup}: Unlock Spoiler (2)'] = index + 311
-    SPOILER_UNLOCK_LOCATION_TABLE[f'{cup}: Unlock Bronze Spoiler (1)'] = index + 321
-    SPOILER_UNLOCK_LOCATION_TABLE[f'{cup}: Unlock Bronze Spoiler (2)'] = index + 331
-    SPOILER_UNLOCK_LOCATION_TABLE[f'{cup}: Unlock Silver Spoiler (1)'] = index + 341
-    SPOILER_UNLOCK_LOCATION_TABLE[f'{cup}: Unlock Silver Spoiler (2)'] = index + 351
-    SPOILER_UNLOCK_LOCATION_TABLE[f'{cup}: Unlock Gold Spoiler (1)'] = index + 361
-    SPOILER_UNLOCK_LOCATION_TABLE[f'{cup}: Unlock Gold Spoiler (2)'] = index + 371
+
+    # CC-specific cup win locations, added cumulatively via the CC Requirement option
+    CC_WIN_LOCATION_TABLE[f'{cup}: Victory on 50cc'] = index + 761
+    CC_WIN_LOCATION_TABLE[f'{cup}: Victory on 100cc'] = index + 771
+    CC_WIN_LOCATION_TABLE[f'{cup}: Victory on 150cc'] = index + 781
 
 # Generate race-specific locations:
 # - Race victory
@@ -51,6 +51,7 @@ for index, cup in enumerate(CUP_NAMES):
 # - Time trials (platinum/gold/silver/bronze)
 # - Puzzle piece 1-3
 # - Lap Sanity locations
+# - CC Related Win locations
 for index, race in enumerate(RACE_NAMES):
     # 3 puzzle pieces per race
     for n in range(3):
@@ -63,17 +64,19 @@ for index, race in enumerate(RACE_NAMES):
     # Cource victory location
     COURSE_WIN_LOCATION_TABLE[f'{race}: Victory'] = index + 1
 
-    # Hat unlocks 
+    # Hat unlock location
     HAT_UNLOCK_LOCATION_TABLE[f'{race}: Hat Unlock'] = index + 401
-    HAT_UNLOCK_LOCATION_TABLE[f'{race}: Bronze Hat Unlock'] = index + 421
-    HAT_UNLOCK_LOCATION_TABLE[f'{race}: Silver Hat Unlock'] = index + 441
-    HAT_UNLOCK_LOCATION_TABLE[f'{race}: Gold Hat Unlock'] = index + 461
 
     # 4 time trials per race
     TIME_TRIAL_LOCATION_TABLE[f'{race}: Time Trial Bronze'] = index + 21
     TIME_TRIAL_LOCATION_TABLE[f'{race}: Time Trial Silver'] = index + 41
     TIME_TRIAL_LOCATION_TABLE[f'{race}: Time Trial Gold'] = index + 61
     TIME_TRIAL_LOCATION_TABLE[f'{race}: Time Trial Platinum'] = index + 81
+
+    # CC-specific race win locations, added cumulatively via the CC Requirement option
+    CC_WIN_LOCATION_TABLE[f'{race}: Victory on 50cc'] = index + 701
+    CC_WIN_LOCATION_TABLE[f'{race}: Victory on 100cc'] = index + 721
+    CC_WIN_LOCATION_TABLE[f'{race}: Victory on 150cc'] = index + 741
 
 # Additional locations for character and kart unlocks that don't exist in the
 # vanilla game
@@ -104,6 +107,7 @@ for index, kart in enumerate(KART_NAMES):
 
 LOCATION_NAME_TO_ID = {
     **COURSE_WIN_LOCATION_TABLE,
+    **CC_WIN_LOCATION_TABLE,
     **TIME_TRIAL_LOCATION_TABLE,
     **PUZZLE_PIECE_LOCATION_TABLE,
     **LAP_SANITY_LOCATION_TABLE,
@@ -150,19 +154,15 @@ def create_regular_locations(world: GarfKartWorld) -> None:
             location_data = get_location_names_with_ids([f"{cup}: Victory"])
             region.add_locations(location_data, GarfKartLocation)
 
+            # Extra CC-specific cup victory checks, added cumulatively up to the
+            # CC requirement (any=0 adds none, 50cc adds 50cc, 100cc adds 50+100, ...)
+            cc_grades = ["50cc", "100cc", "150cc"][:world.options.cc_requirement.value]
+            if cc_grades:
+                cc_data = get_location_names_with_ids([f"{cup}: Victory on {cc}" for cc in cc_grades])
+                region.add_locations(cc_data, GarfKartLocation)
+
         # Add spoiler unlock locations
-        if world.options.randomize_spoilers == "progressive":
-            location_data = get_location_names_with_ids([
-                f'{cup}: Unlock Bronze Spoiler (1)',
-                f'{cup}: Unlock Bronze Spoiler (2)',
-                f'{cup}: Unlock Silver Spoiler (1)',
-                f'{cup}: Unlock Silver Spoiler (2)',
-                f'{cup}: Unlock Gold Spoiler (1)',
-                f'{cup}: Unlock Gold Spoiler (2)',
-            ])
-            region.add_locations(location_data, GarfKartLocation)
-        
-        if world.options.randomize_spoilers == "combine_tiers":
+        if world.options.randomize_spoilers:
             location_data = get_location_names_with_ids([
                 f'{cup}: Unlock Spoiler (1)',
                 f'{cup}: Unlock Spoiler (2)',
@@ -177,6 +177,13 @@ def create_regular_locations(world: GarfKartWorld) -> None:
             location_data = get_location_names_with_ids([f"{race}: Victory"])
             region.add_locations(location_data, GarfKartLocation)
 
+            # Extra CC-specific victory checks, added cumulatively up to the CC
+            # requirement (any=0 adds none, 50cc adds 50cc, 100cc adds 50+100, ...)
+            cc_grades = ["50cc", "100cc", "150cc"][:world.options.cc_requirement.value]
+            if cc_grades:
+                cc_data = get_location_names_with_ids([f"{race}: Victory on {cc}" for cc in cc_grades])
+                region.add_locations(cc_data, GarfKartLocation)
+
         # Add puzzle pieces
         if world.options.randomize_puzzle_pieces:
             # This helper function is the most graceful way I can think to do this right now.
@@ -186,17 +193,16 @@ def create_regular_locations(world: GarfKartWorld) -> None:
             region.add_locations(location_data, GarfKartLocation)
 
         # Add hat locations
-        if world.options.randomize_hats == "progressive":
-            location_data = get_location_names_with_ids([
-                f"{race}: Bronze Hat Unlock",
-                f"{race}: Silver Hat Unlock",
-                f"{race}: Gold Hat Unlock",
-            ])
-            region.add_locations(location_data, GarfKartLocation)
-
-        if world.options.randomize_hats == "combine_tiers":
+        if world.options.randomize_hats:
             location_data = get_location_names_with_ids([f"{race}: Hat Unlock"])
             region.add_locations(location_data, GarfKartLocation)
+
+        # Time trial checks up to (and including) the selected medal grade.
+        time_trial_grades = ["Bronze", "Silver", "Gold", "Platinum"][:world.options.time_trial_randomization.value]
+        if time_trial_grades:
+            time_trial_region = world.get_region(f"{race} Time Trials")
+            location_data = get_location_names_with_ids([f"{race}: Time Trial {grade}" for grade in time_trial_grades])
+            time_trial_region.add_locations(location_data, GarfKartLocation)
 
         if world.options.lap_sanity:
             location_data = get_location_names_with_ids([f"{race} - Lap {n + 1}" for n in range(world.lap_count)])

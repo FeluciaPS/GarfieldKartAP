@@ -97,13 +97,15 @@ for index, spoiler in enumerate(SPOILER_NAMES):
 # Filler items reserve IDs 1000+
 # Trap items reserve IDs 1500+
 FILLER_ITEM_TABLE = {
-    "Filler Item": 1000, # Does nothing, delete later in dev
-    #"Random Item Box": 1001, # Gives random item box next time player has an empty item slot
-    #"Start Boost Helper (Single Use)": 1002, # Guarantees perfect boost at start of next race
+    "Random Item Box": 1000, # Gives random item box next time player has an empty item slot
+    "Start Boost Helper": 1001, # Guarantees perfect boost at start of next race
 }
 TRAP_ITEM_TABLE = {
-    "Mirror Trap": 1500, # Mirrors all tracks until you beat one race
-    "Handling Trap": 1501, # Drastically increases handling until you beat one race
+    "Mirror Trap": 1500, # Mirrors controls
+    "Sleep Trap": 1501, # Puts you to sleep
+    "Grayscale Trap": 1502, # Makes the race grayscale
+    "Broken Drift Trap": 1503, # Makes blue drifts not possible
+    "Bounce Trap": 1504, # Make you bounce in the air
 }
 
 # Combine them all into an item dict
@@ -184,16 +186,6 @@ def create_item_object(world: GarfKartWorld, name: str):
         classification = ItemClassification.progression
 
     # Deprioritize puzzle pieces
-    if name in PUZZLE_PIECE_TABLE and False:
-        if world.options.randomize_puzzle_pieces:
-            puzzle_pieces_in_logic = get_n_named_puzzle_pieces(world.options.puzzle_piece_count)
-            if name in puzzle_pieces_in_logic:
-                classification = ItemClassification.progression_deprioritized_skip_balancing
-            else:
-                classification = ItemClassification.filler
-        else:
-            classification = ItemClassification.filler
-
     if name == "Puzzle Piece":
         if world.options.goal == "puzzle_piece_hunt":
             classification = ItemClassification.progression_deprioritized_skip_balancing
@@ -286,24 +278,12 @@ def create_itempool(world: GarfKartWorld) -> None:
         world.push_precollected(state.starting_item)
         itempool += state.pool_items
 
-    # Hat randomizer items
-    if world.options.randomize_hats == "progressive":
-        itempool += [
-            world.create_item(f'Progressive {hat}') for hat in HAT_NAMES for _ in range(3)
-        ]
-
-    if world.options.randomize_hats == "combine_tiers":
+    if world.options.randomize_hats:
         itempool += [
             world.create_item(hat) for hat in HAT_NAMES
         ]
 
-    # Spoiler randomizer items
-    if world.options.randomize_spoilers == "progressive":
-        itempool += [
-            world.create_item(f'Progressive {spoiler}') for spoiler in SPOILER_NAMES for _ in range(3)
-        ]
-
-    if world.options.randomize_spoilers == "combine_tiers":
+    if world.options.randomize_spoilers:
         itempool += [
             world.create_item(spoiler) for spoiler in SPOILER_NAMES
         ]

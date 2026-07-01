@@ -25,9 +25,7 @@ def create_and_connect_regions(world: GarfKartWorld):
 
 def create_regions(world: GarfKartWorld):
 
-    # Menu is its own region, it serves as the origin region. It only has
-    # "beat race as character/kart" locations attached, which don't exist yet
-    # in v0.2
+    # Menu is its own region, it serves as the origin region.
     menu = Region("Menu", world.player, world.multiworld)
     
     regions = [
@@ -45,6 +43,13 @@ def create_regions(world: GarfKartWorld):
         Region(cup, world.player, world.multiworld) for cup in CUP_NAMES
     ]
 
+    # Time trials get their own regions so they can be reached via either the
+    # course unlock or the owning cup, independent of the stricter race regions
+    if world.options.time_trial_randomization:
+        regions += [
+            Region(f"{race} Time Trials", world.player, world.multiworld) for race in RACE_NAMES
+        ]
+
     world.multiworld.regions += regions
 
 def connect_regions(world: GarfKartWorld):
@@ -57,3 +62,8 @@ def connect_regions(world: GarfKartWorld):
     for cup in CUP_NAMES:
         region = world.get_region(cup)
         menu.connect(region, cup)
+
+    if world.options.time_trial_randomization:
+        for race in RACE_NAMES:
+            region = world.get_region(f"{race} Time Trials")
+            menu.connect(region, f"{race} Time Trials")

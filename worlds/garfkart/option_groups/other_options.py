@@ -26,18 +26,17 @@ class LapSanity(Toggle):
     display_name = "Lap Sanity"
 
 class TrapPercentage(Range):
-    visibility = Visibility.none
-
+    """
+    What percentage of filler items should be replaced with traps.
+    """
     display_name = "Trap Percentage"
     
     range_start = 0
     range_end = 100
-    default = 0
+    default = 25
 
 class DeathLink(Toggle):
     """
     Enables Death Link.
     """
-    visibility = Visibility.none # I don't even know if we're adding this
-
     display_name = "Death Link"

@@ -102,6 +102,10 @@ class GarfKartWorld(World):
         if self.options.goal == "puzzle_piece_hunt":
             self.options.randomize_puzzle_pieces.value = True
 
+        # Time trial randomization is always enabled, if not enabled set to bronze to avoid OptionError
+        if not self.options.time_trial_randomization:
+            self.options.time_trial_randomization.value = options.TimeTrialRandomization.option_bronze
+
         if self.options.item_mania:
             self.options.disable_cpu_items.value = False
 
@@ -165,6 +169,7 @@ class GarfKartWorld(World):
             "goal",
             "cc_requirement",
             "time_trial_goal_grade",
+            "time_trial_randomization",
 
             # Race Randomizer Options
             "randomize_races",

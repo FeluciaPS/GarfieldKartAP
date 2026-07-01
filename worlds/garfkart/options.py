@@ -19,6 +19,7 @@ class GarfKartOptions(PerGameCommonOptions):
     # Race Randomizer Options
     randomize_races: RandomizeRaces
     progressive_cups: ProgressiveCups
+    time_trial_randomization: TimeTrialRandomization
 
     # Puzzle Piece Options
     randomize_puzzle_pieces: RandomizePuzzlePieces
@@ -43,7 +44,6 @@ class GarfKartOptions(PerGameCommonOptions):
     - cpu_scaling (scales CPU kart speed up/down by a percentage)
     - rubber_banding (scales CPU rubber banding settings to speed them up when they're significantly behind and
         slow them down when they're significantly ahead)
-    - no_cpu (disable CPUs entirely)
     """
 
 
@@ -61,7 +61,7 @@ option_groups = [
     ),
     OptionGroup(
         "Race Randomizer Options",
-        [RandomizeRaces, ProgressiveCups],
+        [RandomizeRaces, ProgressiveCups, TimeTrialRandomization],
     ),
     OptionGroup(
         "Puzzle Piece Options",
