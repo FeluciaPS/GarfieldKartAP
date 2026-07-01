@@ -99,6 +99,8 @@ for index, spoiler in enumerate(SPOILER_NAMES):
 FILLER_ITEM_TABLE = {
     "Random Item Box": 1000, # Gives random item box next time player has an empty item slot
     "Start Boost Helper": 1001, # Guarantees perfect boost at start of next race
+    "Stronger Item Boxes": 1002, # Adds item boxes that give 2 items for one race
+    "Inspirational Garfield Quote": 1003, # Adds an inspirational (in garfields opinion) quote at the end of the race
 }
 TRAP_ITEM_TABLE = {
     "Mirror Trap": 1500, # Mirrors controls
