@@ -33,10 +33,10 @@ TIME_TRIAL_ITEM_TABLE = { # TODO: I suspect these will end up going unused
 }
 CUP_ITEM_TABLE = {
     "Progressive Cup Unlock": 200,
-    "Cup Unlock - Lasagna Cup": 201,
-    "Cup Unlock - Pizza Cup": 202,
-    "Cup Unlock - Burger Cup": 203,
-    "Cup Unlock - Ice Cream Cup": 204,
+    "Lasagna Cup": 201,
+    "Pizza Cup": 202,
+    "Burger Cup": 203,
+    "Ice Cream Cup": 204,
 }
 CHARACTER_ITEM_TABLE = {}
 KART_ITEM_TABLE = {}
@@ -59,8 +59,8 @@ ITEM_BOX_RANDOMIZER_TABLE = {
 # - Time Trial Unlock
 # - Puzzle piece 1-3
 for index, race in enumerate(RACE_NAMES):
-    course_unlock_name = f'Course Unlock - {race}'
-    time_trial_unlock_name = f'Time Trial Unlock - {race}'
+    course_unlock_name = f'{race}'
+    time_trial_unlock_name = f'Time Trial - {race}'
 
     # 3 puzzle pieces per race
     for n in range(3):
@@ -81,7 +81,7 @@ for index, kart in enumerate(KART_NAMES):
 # Generate 48 hat unlock items
 for index, hat in enumerate(HAT_NAMES):
     HAT_ITEM_TABLE[f'Progressive {hat}'] = index + 401
-    HAT_ITEM_TABLE[f'Unlock {hat}'] = index + 421
+    HAT_ITEM_TABLE[f'{hat}'] = index + 421
     HAT_ITEM_TABLE[f'{hat} - Bronze'] = index + 441
     HAT_ITEM_TABLE[f'{hat} - Silver'] = index + 461
     HAT_ITEM_TABLE[f'{hat} - Gold'] = index + 481
@@ -89,7 +89,7 @@ for index, hat in enumerate(HAT_NAMES):
 # Generate 24 spoiler unlock items
 for index, spoiler in enumerate(SPOILER_NAMES):
     SPOILER_ITEM_TABLE[f'Progressive {spoiler}'] = index + 501
-    SPOILER_ITEM_TABLE[f'Unlock {spoiler}'] = index + 521
+    SPOILER_ITEM_TABLE[f'{spoiler}'] = index + 521
     SPOILER_ITEM_TABLE[f'{spoiler} - Bronze'] = index + 541
     SPOILER_ITEM_TABLE[f'{spoiler} - Silver'] = index + 561
     SPOILER_ITEM_TABLE[f'{spoiler} - Gold'] = index + 581
@@ -232,7 +232,7 @@ def create_itempool(world: GarfKartWorld) -> None:
     # Add race victory locations
     if randomize_races:
         state = create_randomized_item_state(world, [
-            f'Course Unlock - {race}' for race in RACE_NAMES
+            race for race in RACE_NAMES
         ])
 
         world.push_precollected(state.starting_item)
@@ -253,7 +253,7 @@ def create_itempool(world: GarfKartWorld) -> None:
             # give a random starting cup if there's otherwise no progression
             # possible at all
             item_names = [
-                f'Cup Unlock - {cup}' for cup in CUP_NAMES
+                cup for cup in CUP_NAMES
             ]
             if randomize_races:
                 itempool += [
@@ -294,7 +294,7 @@ def create_itempool(world: GarfKartWorld) -> None:
 
     if world.options.randomize_hats == "combine_tiers":
         itempool += [
-            world.create_item(f'Unlock {hat}') for hat in HAT_NAMES
+            world.create_item(hat) for hat in HAT_NAMES
         ]
 
     # Spoiler randomizer items
@@ -305,7 +305,7 @@ def create_itempool(world: GarfKartWorld) -> None:
 
     if world.options.randomize_spoilers == "combine_tiers":
         itempool += [
-            world.create_item(f'Unlock {spoiler}') for spoiler in SPOILER_NAMES
+            world.create_item(spoiler) for spoiler in SPOILER_NAMES
         ]
 
     # Item randomizer!

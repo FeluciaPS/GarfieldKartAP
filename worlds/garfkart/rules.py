@@ -25,18 +25,18 @@ def get_required_cup_items(cup: str, randomize_races: bool, randomize_cups: bool
             if index > 0:
                 items["Progressive Cup Unlock"] = index
         else:
-            items[f'Cup Unlock - {cup}'] = 1
+            items[cup] = 1
 
     if randomize_races:
         for race in RACES_BY_CUP[cup]:
-            items[f'Course Unlock - {race}'] = 1
+            items[race] = 1
 
     return items
 
 def get_required_race_items(race, randomize_races: bool, randomize_cups: bool, progressive_cups: bool) -> dict[str, int]:
     items = {}
     if randomize_races:
-        items[f'Course Unlock - {race}'] = 1
+        items[race] = 1
 
     elif randomize_cups:
         # Only if randomize_races is False should we lock races until the cup is
@@ -46,7 +46,7 @@ def get_required_race_items(race, randomize_races: bool, randomize_cups: bool, p
             if index > 0:
                 items["Progressive Cup Unlock"] = index
         else:
-            items[f'Cup Unlock - {CUPS_BY_RACE[race]}'] = 1
+            items[CUPS_BY_RACE[race]] = 1
 
     return items
 
