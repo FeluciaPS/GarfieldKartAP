@@ -78,21 +78,13 @@ for index, character in enumerate(CHARACTER_NAMES):
 for index, kart in enumerate(KART_NAMES):
     KART_ITEM_TABLE[kart] = index + 351
 
-# Generate 48 hat unlock items
+# Generate 24 hat unlock items
 for index, hat in enumerate(HAT_NAMES):
-    HAT_ITEM_TABLE[f'Progressive {hat}'] = index + 401
     HAT_ITEM_TABLE[f'{hat}'] = index + 421
-    HAT_ITEM_TABLE[f'{hat} - Bronze'] = index + 441
-    HAT_ITEM_TABLE[f'{hat} - Silver'] = index + 461
-    HAT_ITEM_TABLE[f'{hat} - Gold'] = index + 481
 
-# Generate 24 spoiler unlock items
+# Generate 12 spoiler unlock items
 for index, spoiler in enumerate(SPOILER_NAMES):
-    SPOILER_ITEM_TABLE[f'Progressive {spoiler}'] = index + 501
     SPOILER_ITEM_TABLE[f'{spoiler}'] = index + 521
-    SPOILER_ITEM_TABLE[f'{spoiler} - Bronze'] = index + 541
-    SPOILER_ITEM_TABLE[f'{spoiler} - Silver'] = index + 561
-    SPOILER_ITEM_TABLE[f'{spoiler} - Gold'] = index + 581
 
 # Filler items reserve IDs 1000+
 # Trap items reserve IDs 1500+
@@ -118,8 +110,8 @@ ITEM_NAME_TO_ID = {
     **CUP_ITEM_TABLE, # 4
     **CHARACTER_ITEM_TABLE, # 8
     **KART_ITEM_TABLE, # 8
-    **HAT_ITEM_TABLE, # 48
-    **SPOILER_ITEM_TABLE, # 24 
+    **HAT_ITEM_TABLE, # 24
+    **SPOILER_ITEM_TABLE, # 12
     **ITEM_BOX_RANDOMIZER_TABLE, # 8
     **FILLER_ITEM_TABLE, # as many as we want
     **TRAP_ITEM_TABLE # as many as we want
