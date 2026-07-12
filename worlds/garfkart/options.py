@@ -24,6 +24,7 @@ class GarfKartOptions(PerGameCommonOptions):
     # Puzzle Piece Options
     randomize_puzzle_pieces: RandomizePuzzlePieces
     puzzle_piece_count: PuzzlePieceCount
+    puzzle_piece_required: PuzzlePieceRequired
 
     # Character Options
     randomize_characters: RandomizeCharacters
@@ -51,6 +52,7 @@ class GarfKartOptions(PerGameCommonOptions):
     randomize_items: RandomizeItems
     lap_sanity: LapSanity
     trap_percentage: TrapPercentage
+    trap_handling: TrapHandling
     death_link: DeathLink
 
 
@@ -65,7 +67,7 @@ option_groups = [
     ),
     OptionGroup(
         "Puzzle Piece Options",
-        [RandomizePuzzlePieces, PuzzlePieceCount]
+        [RandomizePuzzlePieces, PuzzlePieceCount, PuzzlePieceRequired]
     ),
     OptionGroup(
         "Character Options",
@@ -77,7 +79,7 @@ option_groups = [
     ),
     OptionGroup(
         "Other Randomizer Options",
-        [RandomizeItems, LapSanity, TrapPercentage, DeathLink],
+        [RandomizeItems, LapSanity, TrapPercentage, TrapHandling, DeathLink],
     ),
 ]
 

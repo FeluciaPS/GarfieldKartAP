@@ -178,6 +178,7 @@ class GarfKartWorld(World):
             # Puzzle Piece Options
             "randomize_puzzle_pieces",
             "puzzle_piece_count",
+            "puzzle_piece_required",
 
             # Character Options
             "randomize_characters",
@@ -198,6 +199,7 @@ class GarfKartWorld(World):
             "randomize_items",
             "lap_sanity",
             "trap_percentage",
+            "trap_handling",
             "death_link"
         )
 

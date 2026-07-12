@@ -53,7 +53,7 @@ class TimeTrialGoalGrade(Choice):
     """
     display_name = "Time Trials Goal Grade"
 
-    default = 1
+    default = 0
     option_bronze = 0
     option_silver = 1
     option_gold = 2

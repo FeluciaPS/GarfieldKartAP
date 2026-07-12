@@ -28,9 +28,6 @@ PUZZLE_PIECE_TABLE = {
 COURSE_ITEM_TABLE = {
     "Progressive Course Unlock": 100
 }
-TIME_TRIAL_ITEM_TABLE = { # TODO: I suspect these will end up going unused
-    "Progressive Time Trial Unlock": 150
-}
 CUP_ITEM_TABLE = {
     "Progressive Cup Unlock": 200,
     "Lasagna Cup": 201,
@@ -56,11 +53,9 @@ ITEM_BOX_RANDOMIZER_TABLE = {
 
 # Generate race-specific items:
 # - Course Unlock
-# - Time Trial Unlock
 # - Puzzle piece 1-3
 for index, race in enumerate(RACE_NAMES):
-    course_unlock_name = f'{race}'
-    time_trial_unlock_name = f'Time Trial - {race}'
+    course_unlock_name = f'{race} Course'
 
     # 3 puzzle pieces per race
     for n in range(3):
@@ -68,7 +63,6 @@ for index, race in enumerate(RACE_NAMES):
         PUZZLE_PIECE_TABLE[name] = index * 3 + n + 1
 
     COURSE_ITEM_TABLE[course_unlock_name] = index + 101
-    TIME_TRIAL_ITEM_TABLE[time_trial_unlock_name] = index + 151
 
 # Generate 8 character unlock items
 for index, character in enumerate(CHARACTER_NAMES):
@@ -106,7 +100,6 @@ TRAP_ITEM_TABLE = {
 ITEM_NAME_TO_ID = {
     **PUZZLE_PIECE_TABLE, # 48
     **COURSE_ITEM_TABLE, # 16
-    **TIME_TRIAL_ITEM_TABLE, # 16
     **CUP_ITEM_TABLE, # 4
     **CHARACTER_ITEM_TABLE, # 8
     **KART_ITEM_TABLE, # 8
@@ -118,10 +111,8 @@ ITEM_NAME_TO_ID = {
 }
 
 # Progression items
-# TODO: Handle these differently
 PROGRESSION_ITEMS = [
     *COURSE_ITEM_TABLE,
-    *TIME_TRIAL_ITEM_TABLE,
     *CUP_ITEM_TABLE
 ]
 
@@ -218,7 +209,7 @@ def create_itempool(world: GarfKartWorld) -> None:
     # Add race victory locations
     if randomize_races:
         state = create_randomized_item_state(world, [
-            race for race in RACE_NAMES
+            f'{race} Course' for race in RACE_NAMES
         ])
 
         world.push_precollected(state.starting_item)

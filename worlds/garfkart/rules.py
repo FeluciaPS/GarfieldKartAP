@@ -2,6 +2,8 @@ from __future__ import annotations
 
 # Logic goes here
 
+import math
+
 from .data import KART_NAMES, CHARACTER_NAMES, CUP_NAMES, CUPS_BY_RACE, ITEM_NAMES, PUZZLE_PIECE_REQUIREMENTS, RACE_NAMES, RACES_BY_CUP, PuzzlePieceRequirements
 from .options import RandomizerType, is_cups_randomized, is_races_randomized
 
@@ -29,14 +31,14 @@ def get_required_cup_items(cup: str, randomize_races: bool, randomize_cups: bool
 
     if randomize_races:
         for race in RACES_BY_CUP[cup]:
-            items[race] = 1
+            items[f"{race} Course"] = 1
 
     return items
 
 def get_required_race_items(race, randomize_races: bool, randomize_cups: bool, progressive_cups: bool) -> dict[str, int]:
     items = {}
     if randomize_races:
-        items[race] = 1
+        items[f"{race} Course"] = 1
 
     elif randomize_cups:
         # Only if randomize_races is False should we lock races until the cup is
@@ -59,7 +61,7 @@ def get_time_trial_access_rule(race, randomize_races: bool, randomize_cups: bool
     clauses = []
 
     if randomize_races:
-        clauses.append(Has(race))
+        clauses.append(Has(f"{race} Course"))
 
     if randomize_cups:
         cup = CUPS_BY_RACE[race]
@@ -163,6 +165,9 @@ def set_all_location_rules(world: GarfKartWorld):
                 location = world.get_location(f'Find Item: {item}')
                 world.set_rule(location, Has(f"Item Unlock - {item}"))
 
+def get_required_puzzle_pieces(world: GarfKartWorld) -> int:
+    return math.ceil(world.options.puzzle_piece_count.value * world.options.puzzle_piece_required.value / 100)
+
 def set_completion_condition(world: GarfKartWorld):
     randomize_races = is_races_randomized(world) == RandomizerType.random
     randomize_cups = is_cups_randomized(world) == RandomizerType.random
@@ -191,7 +196,7 @@ def set_completion_condition(world: GarfKartWorld):
             }
 
     if world.options.goal == "puzzle_piece_hunt":
-        required_items["Puzzle Piece"] = world.options.puzzle_piece_count.value
+        required_items["Puzzle Piece"] = get_required_puzzle_pieces(world)
 
     # HasAllCounts resolves an empty mapping to True_, matching the old
     # state.has_all_counts({}) behaviour for goals without unlock requirements
