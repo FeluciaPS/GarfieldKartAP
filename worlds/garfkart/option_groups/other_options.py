@@ -41,7 +41,7 @@ class TrapHandling(Choice):
     
     - Time: Disables a trap sent after 1 minute of them being active in a race.
     - Race: Disables a trap sent after finishing a race, regardless of placement.
-    - Win: Disables a trap sent after finishing a race in 1st place.
+    - Win: Disables a trap sent after finishing a race in 1st place. (WARNING! THIS CAN RESULT IN EXTREMELY DIFFICULT SEEDS! BE WARNED!)
     """
     display_name = "Trap Handling"
 
