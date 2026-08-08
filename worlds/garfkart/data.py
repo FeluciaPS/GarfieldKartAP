@@ -137,7 +137,7 @@ ITEM_NAMES = [
 class PuzzlePieceRequirements:
     Nothing = 0 # Probably unused 
     Spring = 1 # Spring
-    Lasagna = 2 # Lasagna (unused)
+    Lasagna = 2 # Lasagna
     Either = 3 # Lasagna or Spring
 
 # Dictionary of puzzle pieces and their required items
@@ -178,7 +178,7 @@ PUZZLE_PIECE_REQUIREMENTS = {
     "Sneak-a-Peak": {
         1: PuzzlePieceRequirements.Spring,
         2: PuzzlePieceRequirements.Spring,
-        3: PuzzlePieceRequirements.Either,
+        3: PuzzlePieceRequirements.Lasagna, # Can also be done with spring, but this should be considered out of logic cause its way easier with Lasagna
     },
     "Blazing Oasis": {
         1: PuzzlePieceRequirements.Spring,

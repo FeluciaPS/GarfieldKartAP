@@ -57,7 +57,7 @@ class TimeTrialRandomization(Choice):
     """
     display_name = "Time Trial Randomization"
 
-    default = 1
+    default = 0
     option_off = 0
     option_bronze = 1
     option_silver = 2
