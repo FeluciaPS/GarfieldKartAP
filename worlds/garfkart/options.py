@@ -74,7 +74,7 @@ option_groups = [
         [RandomizeCharacters, RandomizeKarts, RandomizeHats, RandomizeSpoilers, StatRandomizer, RandomStatValues]
     ),
     OptionGroup(
-        "Game Options",
+        "Gameplay Options",
         [SingleLapMode, LapCount, DisableCPUItems, ItemMania, SpringsOnly],
     ),
     OptionGroup(

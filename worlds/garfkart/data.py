@@ -183,7 +183,7 @@ PUZZLE_PIECE_REQUIREMENTS = {
     "Blazing Oasis": {
         1: PuzzlePieceRequirements.Spring,
         2: PuzzlePieceRequirements.Spring,
-        3: PuzzlePieceRequirements.Either,
+        3: PuzzlePieceRequirements.Spring,
     },
     "Pastacosi Factory": {
         1: PuzzlePieceRequirements.Spring,

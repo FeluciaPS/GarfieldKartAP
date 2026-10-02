@@ -53,34 +53,12 @@ def get_required_race_items(race, randomize_races: bool, randomize_cups: bool, p
     return items
 
 def get_time_trial_access_rule(race, randomize_races: bool, randomize_cups: bool, progressive_cups: bool):
-    """
-    A course's time trials are in logic once the course can be reached by ANY
-    unlock - its own course unlock OR the cup it belongs to. Returns a rule, or
-    None when the course is always reachable (nothing gating it).
-    """
-    clauses = []
-
-    if randomize_races:
-        clauses.append(Has(f"{race} Course"))
-
-    if randomize_cups:
-        cup = CUPS_BY_RACE[race]
-        if progressive_cups:
-            index = CUP_NAMES.index(cup)
-            if index == 0:
-                # The first cup is always unlocked, so this path is always open
-                return None
-            clauses.append(Has("Progressive Cup Unlock", index))
-        else:
-            clauses.append(Has(cup))
-
-    if not clauses:
+    """Time trials open with whatever unlocks the course itself."""
+    required_items = get_required_race_items(race, randomize_races, randomize_cups, progressive_cups)
+    if not required_items:
         return None
 
-    rule = clauses[0]
-    for clause in clauses[1:]:
-        rule |= clause
-    return rule
+    return HasAllCounts(required_items)
 
 def set_all_entrance_rules(world: GarfKartWorld):
     # Store these in a variable to reduce redundancy
